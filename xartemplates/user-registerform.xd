@@ -1,0 +1,211 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="minpass">xarModGetVar('roles','minpasslength')?xarModGetVar('roles','minpasslength'):0</xar:set>
+<xar:set name="maxpass">xarModGetVar('roles','maxpasslength')?xarModGetVar('roles','maxpasslength'):0</xar:set>
+<xar:set name="passhelptext">xarModGetVar('roles','passhelptext')?xarModGetVar('roles','passhelptext'):''</xar:set>
+<xar:base-include-javascript libname="jquery" libfile="jquery.min" plugin="ui" pluginfile="ui.core.min,ui.dialog.min" style="ui.css" />
+<xar:template file="jq-user-registration" module="registration" />
+<xar:set name="tabindex">1</xar:set>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+            <xar:template type="module" module="base" file="user-menu" />
+        </xar:if>
+    </div>
+    <xar:set name="curnum">'0'</xar:set>
+    <xar:comment> Code for Recommend Invitations </xar:comment>
+    <xar:if condition="xarModIsAvailable('recommend') and xarModGetVar('recommend','useinvites') ">
+        <xar:set name="thiscode">xarSessionGetVar('icode');</xar:set>
+        <xar:if condition="!xarModGetVar('recommend','invitesandreg')">
+            <xar:comment>Check icode</xar:comment>
+            <xar:if condition="isset($thiscode)">
+                <xar:set name="validcode">xarModAPIFunc('recommend','user','get',array('icode'=>$thiscode));</xar:set>
+                <xar:set name="goodcode">(($validcode['iuid']==0) AND ($validcode['icode'] == $thiscode) AND ($validcode['joindate'] == 0))?1:0;</xar:set>
+            <xar:else />
+                <xar:set name="goodcode">0</xar:set>
+            </xar:if>
+            <xar:if condition="$goodcode ne 1">
+               <xar:set name="foo">xarModURL('recommend','user','invite',array('noregistration'=>1,'useremail'=>''));</xar:set>
+               <xar:set name="dummy">xarResponseRedirect($foo);</xar:set>
+            </xar:if>
+        </xar:if>
+    </xar:if>
+    <xar:comment> End Code for Recommend Invitations </xar:comment>
+    <div class="xar-mod-body">
+        <h1><xar:mlstring>Membership Registration</xar:mlstring></h1>
+        <div class="xar-mod-content">
+            <xar:if condition="isset($withupload) AND $withupload">
+                <xar:set name="enc_type">'multipart/form-data'</xar:set>
+            <xar:else/>
+                <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
+            </xar:if>
+
+            <form method="post" id="registrationform" action="#xarModURL('registration','user','register')#" enctype="#$enc_type#">
+                <fieldset>
+                    <legend><xar:mlstring>Registration Details</xar:mlstring></legend>
+
+                    <div class="xar-form-input-wrapper">
+                        <label for="username" class="xar-form-label xar-help" title="#xarML('Select a unique login name - no spaces')#">
+                               <xar:mlstring>Login name</xar:mlstring>:
+                        </label>
+                        <xar:set name="username">xarVarPrepForDisplay($values['username'])</xar:set>
+                        <xar:data-input type="textbox" name="username" id="username" value="$username" size="30" maxlength="255" tabindex="$tabindex++" autocomplete="off"/>
+                        <xar:if condition="!empty($invalid['username'])">
+                            <span class="xar-error">#$invalid['username']#</span>
+                        </xar:if>
+                    </div>
+                    <xar:if condition="$requiredisplayname">
+                        <div class="xar-form-input-wrapper">
+                            <label for="displayname" class="xar-form-label xar-help" title="#xarML('Enter the name you would like displayed to other site users')#">
+                                   <xar:mlstring>Display Name</xar:mlstring><xar:mlstring>:&#160;</xar:mlstring>
+                            </label>
+                            <xar:set name="displayname">xarVarPrepForDisplay($values['displayname'])</xar:set>
+                            <xar:data-input type="textbox" name="displayname" id="displayname" value="$displayname" size="30" maxlength="255" tabindex="$tabindex++" autocomplete="off"/>
+                            <xar:if condition="!empty($invalid['displayname'])">
+                                <span class="xar-error">#$invalid['displayname']#</span>
+                            </xar:if>
+                        </div>
+                    </xar:if>
+                    <div class="xar-form-input-wrapper">
+                        <label for="email" class="xar-form-label xar-help" title="#xarML('Enter your email address')#">
+                               <xar:mlstring>E-mail Address</xar:mlstring><xar:mlstring>:&#160;</xar:mlstring>
+                        </label>
+                         <xar:set name="email">xarVarPrepForDisplay($values['email'])</xar:set>
+                        <xar:data-input type="email" name="email" id="email" value="$email" size="30" maxlength="255" tabindex="$tabindex++" autocomplete="off"/>
+                        <xar:if condition="!empty($invalid['email'])">
+                            <span class="xar-error">#$invalid['email']#</span>
+                        </xar:if>
+                    </div>
+                    <xar:if condition="$repeatemail" >
+                        <div class="xar-form-input-wrapper">
+                            <label for="email2" class="xar-form-label xar-help" title="#xarML('Enter your email address again to verify')#">
+                                   <xar:mlstring>Retype your e-mail address</xar:mlstring><xar:mlstring>:&#160;</xar:mlstring>
+                            </label>
+                            <xar:set name="email2">xarVarPrepForDisplay($values['email2'])</xar:set>
+                           <xar:data-input type="email" name="email2" id="email2" value="$email2" size="30" maxlength="255" tabindex="$tabindex++" autocomplete="off"/>
+                            <xar:if condition="!empty($invalid['email2'])">
+                                <span class="xar-error">#$invalid['email2']#</span>
+                            </xar:if>
+                        </div>
+                    </xar:if>
+                    <xar:if condition="xarModGetVar('registration', 'showdynamic')" >
+                        <xar:if condition="isset($properties)">
+                            <xar:foreach in="$properties" key="$name">
+                                <xar:set name="formlabel">$properties[$name]->id</xar:set>
+                                <div class="xar-form-input-wrapper">
+                                    <xar:data-label property="$properties[$name]" label="id" />
+                                    <xar:data-input property="$properties[$name]" tabindex="$tabindex++" />
+                                </div>
+                            </xar:foreach>
+                        </xar:if>
+                    </xar:if>
+
+                    <xar:if condition="$chooseownpassword" >
+                        <div class="xar-form-input-wrapper">
+                            <label for="pass1" class="xar-form-label xar-help" title="#xarML('Enter a password')#">
+                                   <xar:mlstring>Password</xar:mlstring><xar:mlstring>:&#160;</xar:mlstring>
+                            </label>
+                            <xar:set name="pass1">xarVarPrepForDisplay($values['pass1'])</xar:set>
+                            <xar:data-input type="password" name="pass1" id="pass1" value="$pass1" size="30" maxlength="40" tabindex="$tabindex++" autocomplete="off"/>
+                        </div>
+                        <div class="xar-form-input-wrapper-after">
+                            <xar:if condition="!empty($invalid['pass1'])">
+                                 <span class="xar-error">#$invalid['pass1']#</span>
+                            <xar:elseif condition="($minpass gt 0) or ($maxpass gt 0) or !empty($passhelptext)" />
+                                <div class="xar-form-input-wrapper">
+                                <xar:if condition="$minpass gt 0 and $maxpass gt 0">
+                                <xar:ml>
+                                    <xar:mlstring>Password must be between #(1) and #(2) characters in length. #(3)</xar:mlstring>
+                                    <xar:mlvar>#$minpass#</xar:mlvar>
+                                    <xar:mlvar>#$maxpass#</xar:mlvar>
+                                    <xar:mlvar>#$passhelptext#</xar:mlvar>
+                                </xar:ml>
+                                <xar:elseif condition="$minpass gt 0" />
+                                <xar:ml>
+                                    <xar:mlstring>Password must be at least #(1) characters in length. #(2)</xar:mlstring>
+                                    <xar:mlvar>#$minpass#</xar:mlvar>
+                                    <xar:mlvar>#$passhelptext#</xar:mlvar>
+                                </xar:ml>
+                                </xar:if>
+                                </div>
+                            </xar:if>
+                       </div>
+                       <div class="xar-form-input-wrapper">
+                        <label for="pass2" class="xar-form-label xar-help" title="#xarML('Enter again to confirm your password')#">
+                               <xar:mlstring>Retype Password</xar:mlstring><xar:mlstring>:&#160;</xar:mlstring>
+                        </label>
+                            <xar:set name="pass2">xarVarPrepForDisplay($values['pass1'])</xar:set>
+                            <xar:data-input type="password" name="pass2" id="pass2" value="$pass2" size="30" maxlength="40" tabindex="$tabindex++" autocomplete="off"/>
+                        </div>
+                        <div class="xar-form-input-wrapper-after">
+                        <xar:if condition="!empty($invalid['pass2'])">
+                            <span class="xar-error">#$invalid['pass2']#</span>
+                        </xar:if>
+                        </div>
+                    </xar:if>
+                    <xar:if condition="$showterms eq 0 and $showprivacy eq 1">
+                        <div class="xar-form-input-wrapper-after">
+                            <input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" tabindex="$tabindex++"/>
+                            <label for="agreetoterms" class="xar-help" title="#xarML('Please check to agree to the website requirements')#">
+                                <xar:mlstring>I agree to be bound by this website's </xar:mlstring>
+                                <a id="privacypolicy" href="#xarModURL('registration','user','privacy')#"><xar:mlstring>Privacy Policy</xar:mlstring></a>.
+                            </label>
+                            <br />
+                            <xar:if condition="!empty($invalid['agreetoterms'])">
+                                <span class="xar-error">#$invalid['agreetoterms']#</span>
+                            </xar:if>
+                        </div>
+                    <xar:elseif condition="$showprivacy eq 0 and $showterms eq 1" />
+                        <div class="xar-form-input-wrapper-after">
+                            <input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" tabindex="$tabindex++"/>
+                            <label for="agreetoterms"  class="xar-help" title="#xarML('Please check to agree to the website requirements')#">
+                                <xar:mlstring>I agree to be bound by this website's </xar:mlstring>
+                                <a id="termsofuse" href="#xarModURL('registration','user','terms')#"><xar:mlstring>Terms of Use</xar:mlstring></a>.
+                            </label>
+                            <br />
+                            <xar:if condition="!empty($invalid['agreetoterms'])">
+                                <span class="xar-error">#$invalid['agreetoterms']#</span>
+                            </xar:if>
+                        </div>
+                    <xar:elseif condition="$showprivacy eq 1 and $showterms eq 1" />
+                        <div class="xar-form-input-wrapper-after">
+                            <input type="checkbox" name="agreetoterms" id="agreetoterms" value="1" tabindex="$tabindex++"/>
+                            <label for="agreetoterms"  class="xar-help"  title="#xarML('Please check to agree to the website requirements')#">
+                                <xar:mlstring>I agree to be bound by this website's </xar:mlstring>
+                                <a id="termsofuse2" href="#xarModURL('registration','user','terms')#"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>and</xar:mlstring> <a id="privacypolicy2" href="&xar-modurl-registration-user-privacy;"><xar:mlstring>Privacy Policy</xar:mlstring></a>.
+                             </label>
+                             <br />
+                        </div>
+                         <xar:if condition="!empty($invalid['agreetoterms'])">
+                             <span class="xar-error">#$invalid['agreetoterms']#</span>
+                         </xar:if>
+
+                    <xar:else />
+                        <input type="hidden" name="agreetoterms" id="agreetoterms" value="1" />
+                    </xar:if>
+
+                    <xar:if condition="!empty($hookoutput)">
+                        <xar:foreach in="$hookoutput" key="$hookmodule">
+                            <xar:if condition="($hookmodule ne 'dynamicdata') and !empty($hookmodule)">
+                            #$hookoutput[$hookmodule]#
+                            </xar:if>
+                        </xar:foreach>
+                    </xar:if>
+                </fieldset>
+
+                 <div class="xar-form-footer">
+                    <xar:set name="submitlabel"><xar:mlstring>Continue registration</xar:mlstring></xar:set>
+                    <input type="submit" value="#$submitlabel#" tabindex="#$tabindex#" />
+
+                    <input type="hidden" name="redirecturl" id="registrationredirecturl" value="#$redirecturl#" />
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <xar:comment> Code for Recommend Invitations </xar:comment>
+                    <xar:if condition="xarModIsAvailable('recommend') and xarModGetVar('recommend','useinvites') ">
+                         <input type="hidden" name="icode" id="icode" value="#$thiscode#" />
+                    </xar:if>
+                    <xar:comment> End Code for Recommend Invitations </xar:comment>
+                    <input type="hidden" name="phase" id="phase" value="checkregistration" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

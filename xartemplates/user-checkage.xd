@@ -1,0 +1,50 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="pagetitle"><xar:mlstring>Create an account</xar:mlstring></xar:set>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+            <xar:template type="module" module="base" file="user-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <h1><xar:mlstring>Check Age</xar:mlstring></h1>
+
+        <div class="xar-mod-content">
+            <p>
+                <xar:ml>
+                    <xar:mlstring>You must be #(1) or over, or have parental permission to register here.</xar:mlstring>
+                    <xar:mlvar>#$minage#</xar:mlvar>
+                </xar:ml>
+            </p>
+            <xar:if condition="!isset($notminage) OR (isset($notminage) AND $notminage ne 1)">
+                <form method="post" id="checkage" action="#xarModURL('registration','user','register')#" enctype="application/x-www-form-urlencoded">
+                    <div class="xar-form-input-wrapper">
+                        <label for="checkage"  class="xar-form-label" title="#xarML('Please select your option')#">
+                            <xar:mlstring>Confirm your age: </xar:mlstring>
+                        </label>
+                        <p class="xar-form-container-after">
+                        <xar:data-input type="radio" name="checkage" id="checkage" options="$checkageoptions" layout="vertical" class="xar-form-text" />
+                        </p>
+                    </div>
+
+                    <p>
+                        <xar:ml><xar:mlstring>By checking the minimum age button you certify that you are either #(1) or over, or that you have parental consent to register here.</xar:mlstring>
+                        <xar:mlvar>#$minage#</xar:mlvar></xar:ml>
+                    </p>
+
+                    <div class="xar-form-footer">
+                        <xar:set name="submitlabel"><xar:mlstring>Confirm your age</xar:mlstring></xar:set>
+                        <input type="submit" value="#$submitlabel#" />
+                       <input type="hidden" name="phase" id="phase" value="registration" />
+                    </div>
+                </form>
+            <xar:else />
+                 <xar:ml>
+                    <xar:mlstring>Thank you for your interest in registering on this site. You do not meet the registration requirement at the present time.
+                    We invite you to register again when you meet that requirement or have parental permission to register.</xar:mlstring>
+                    <xar:mlvar>#$minage#</xar:mlvar>
+                </xar:ml>
+            </xar:if>
+        </div>
+    </div>
+</div>

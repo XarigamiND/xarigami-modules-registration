@@ -1,0 +1,34 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+            <xar:template type="module" module="base" file="user-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <h1><xar:mlstring>Account created</xar:mlstring></h1>
+        <div class="xar-mod-content">
+            <p>
+                <xar:if condition="$noredirects">
+                    <xar:mlstring>Your account has been successfully created! </xar:mlstring>
+                    <xar:mlstring>
+                        Your password has been emailed to you so you can use it at next login.
+                        You will now be logged into the website automatically and redirected to your Account Profile page.
+                    </xar:mlstring>
+                <xar:else />
+                    <xar:mlstring>Your account has been successfully created!
+                        You will now be automatically logged into the website.
+                    </xar:mlstring>
+                </xar:if>
+            </p>
+            <p>
+                <xar:ml>
+                <xar:mlstring>If you are not automatically logged into the site and redirected in a few seconds, please go to <a href="#(1)">log in</a>.</xar:mlstring>
+                  <xar:mlvar>
+                   #$loginlink#
+                </xar:mlvar>
+                </xar:ml>
+            </p>
+        </div>
+    </div>
+</div>

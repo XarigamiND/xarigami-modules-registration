@@ -1,0 +1,26 @@
+Version 1.2.2 - 2011-09-17 icedlava@2skies.com
+---------------------------------
+xreg-000174  Bug     Dynamic data not saved in new user creation7
+xreg-000532  Bug     User doesn't get password
+xreg-000900  Bug     Bad IP address check in register phase
+xreg-000412  Improvement     Default install can allow registration without admin knowledge
+xreg-000913  Improvement     Check age form
+xreg-000860  New feature     Module alias
+xreg-000910  New feature     Hidden Registration URL
+
+Version 1.2.1 - 2011-09-09 icedlava@2skies.com
+---------------------------------
+- Fixes for module alias - missed code not committed
+- Add hidden module url when used with alias
+
+Version 1.2.0 - 2011-06-17 icedlava@2skies.com
+----------------------------------
+- Updated for xarigami 1.4.0
+- xreg-000900 Bad IP in some cases
+- xreg-000695 Registration values are lost on going back in form
+- xreg-000860 Add Module alias
+- xreg-000861 Improved client side validation
+- xreg-000532  User doesn't get password (in some cases)
+- xreg-000862 Add user status messages
+- xreg-000412   Default install can allow registration without admin knowledge
+- xreg-000863 Better admin menu

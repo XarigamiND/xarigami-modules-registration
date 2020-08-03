@@ -1,0 +1,27 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="adminemail">xarModGetVar('mail','adminmail')</xar:set>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+            <xar:template type="module" module="base" file="user-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+
+    <h1><xar:mlstring>Instructions Sent</xar:mlstring></h1>
+     <div class="xar-mod-content">
+            <p>
+                <xar:mlstring>Further instructions for registering have been sent to the email you provided. Please take a moment and read the instructions.</xar:mlstring>
+            </p>
+            <p>
+                <xar:mlstring>If you do not receive the email, please check for it in your spam (junk mail) folder.</xar:mlstring>
+            </p>
+            <p>
+                <xar:ml>
+                    <xar:mlstring>If you have a question, or didn't receive your instructions please contact the <a href="mailto:#(1)">website administrator</a>.</xar:mlstring>
+                    <xar:mlvar>#$adminemail#</xar:mlvar>
+                </xar:ml>
+            </p>
+        </div>
+    </div>
+</div>

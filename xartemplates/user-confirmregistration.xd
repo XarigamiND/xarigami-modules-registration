@@ -1,0 +1,93 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="tabindex">1</xar:set>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+            <xar:template type="module" module="base" file="user-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <h1><xar:mlstring>Confirm registration information</xar:mlstring></h1>
+        <div class="xar-mod-content">
+            <p class="xar-form-input-wrapper">
+                <xar:mlstring>Please review the information below carefully and check it for correctness.</xar:mlstring>
+            </p>
+            <p class="xar-form-input-wrapper">
+                <xar:mlstring>Click Create Account to continue and create your account or </xar:mlstring><a href="#$redirecturl#"><xar:mlstring>return to the start</xar:mlstring></a><xar:mlstring> to change your registration details.</xar:mlstring>
+            </p>
+            <xar:data-getitem name="$properties" module="roles" itemid="0" />
+
+            <form action="&xar-modurl-registration-user-register;" method="post" enctype="application/x-www-form-urlencoded">
+                <fieldset>
+                    <legend><xar:mlstring>Confirm Registration</xar:mlstring></legend>
+                    <div class="xar-form-input-wrapper">
+                        <label for="username" class="xar-form-label" title="#xarML('Select a unique login name - no spaces')#">
+                               <xar:mlstring>Login name</xar:mlstring><xar:mlstring>:&#160;</xar:mlstring>
+                        </label>
+                        #xarVarPrepForDisplay($username)#
+                    </div>
+                    <xar:if condition="$requiredisplayname">
+                        <div class="xar-form-input-wrapper">
+                            <label for="displayname" class="xar-form-label" title="#xarML('Enter the name you would like displayed to other site users')#">
+                                   <xar:mlstring>Display Name</xar:mlstring><xar:mlstring>:&#160;</xar:mlstring>
+                            </label>
+                            #xarVarPrepForDisplay($displayname)#
+                        </div>
+                    </xar:if>
+                    <div class="xar-form-input-wrapper">
+                        <label for="email" class="xar-form-label" title="#xarML('Enter your email address')#">
+                               <xar:mlstring>E-mail Address</xar:mlstring><xar:mlstring>:&#160;</xar:mlstring>
+                        </label>
+                        #xarVarPrepForDisplay($email)#
+                    </div>
+
+                   <xar:if condition="xarModGetVar('registration', 'showdynamic')" >
+                        <xar:if condition="isset($properties)">
+                            <fieldset>
+                                <legend><xar:mlstring>User Details</xar:mlstring></legend>
+                                    <xar:foreach in="$properties" key="$name">
+                                        <xar:set name="formlabel">$properties[$name]->id</xar:set>
+                                        <div class="xar-form-input-wrapper">
+                                            <label for="dd_#$formlabel#" class="xar-form-label" title="#xarML('Please enter required information')#">
+                                                <xar:data-label property="$properties[$name]" /><xar:mlstring>:&#160;</xar:mlstring>
+                                            </label>
+                                            <xar:data-output property="$properties[$name]" value="$propertyvalues[$name]" tabindex="$tabindex++" />
+                                        </div>
+                                    </xar:foreach>
+                            </fieldset>
+                        </xar:if>
+                    </xar:if>
+                    <xar:comment>Call the hooks here, loop over each one of them, not counting DD</xar:comment>
+                    <xar:if condition="!empty($hookoutput)">
+                                <xar:foreach in="$hookoutput" key="$hookmodule">
+                                    <xar:if condition="($hookmodule ne 'dynamicdata') and !empty($hookmodule)">
+                                        #$hookoutput[$hookmodule]#
+                                    </xar:if>
+                                </xar:foreach>
+                    </xar:if>
+                </fieldset>
+
+                <div class="xar-form-footer">
+                    <input type="submit" value="#$createlabel#" />
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="phase" id="phase" value="createuser" />
+                    <xar:if condition="xarModIsAvailable('recommend') AND xarModGetVar('recommend','useinvites')">
+                        <xar:set name="thiscode">xarSessionGetVar('icode');</xar:set>
+                       <input type="hidden" name="icode" id="icode" value="#$thiscode#" />
+                    </xar:if>
+                    <input type="hidden" name="username" id="username" value="#xarVarPrepForDisplay($username)#" />
+                    <input type="hidden" name="displayname" id="displayname" value="#xarVarPrepForDisplay($displayname)#" />
+                    <input type="hidden" name="email" id="email" value="#xarVarPrepForDisplay($email)#" />
+                    <input type="hidden" name="pass" id="pass" value="#xarVarPrepForDisplay($pass)#" />
+                    <input type="hidden" name="redirecturl" id="registrationredirecturl" value="#$redirecturl#" />
+                    <input type="hidden" name="ip" id="ip" value="#$ip#" />
+                    <xar:if condition="isset($properties)" >
+                        <xar:foreach in="$properties" key="$name">
+                            <xar:data-input property="$properties[$name]" value="$propertyvalues[$name]" hidden="true" />
+                        </xar:foreach>
+                    </xar:if>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

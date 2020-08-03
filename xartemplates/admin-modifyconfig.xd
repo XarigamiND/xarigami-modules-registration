@@ -1,0 +1,275 @@
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<xar:set name="tabindex">1</xar:set>
+<xar:if condition="xarModIsAvailable('tinymce')">
+    <xar:set name="contenttype">'xartinymce'</xar:set>
+<xar:else />
+ <xar:set name="contenttype">'textarea_medium'</xar:set>
+</xar:if>
+<xar:style scope="module" module="base" file="tabs" />
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+            <xar:template type="module" module="base" file="admin-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <h1><xar:mlstring>Modify Configuration</xar:mlstring></h1>
+        <div class="xar-mod-content">
+            <xar:comment> Begin General Options </xar:comment>
+            <xar:if condition="$tab eq 'general'">
+                <form method="post" action="#xarModURL('registration','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
+                <fieldset>
+                    <legend>
+                        <xar:mlstring>General Options</xar:mlstring>
+                    </legend>
+                    <div class="xar-form-input-wrapper-after">
+                        <xar:data-input type="checkbox" name="shorturls" id="shorturls" checked="$shorturlschecked" tabindex="$tabindex++" />
+                        <label for="shorturls" title="#xarML('Enable short URLS?')#">
+                            <xar:mlstring>Enable short URLs?</xar:mlstring>
+                        </label>
+                     </div>
+                     <div class="xar-form-input-wrapper">
+                        <label for = "modulealias" class="xar-form-label" title="#xarML('Use an alias instead of the module name')#">
+                            <xar:mlstring>Use a module alias</xar:mlstring>
+                        </label>
+                        <xar:data-input type="checkbox" name="modulealias" id="modulealias" value="1" checked="$usealiasname" />
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="aliasname" class="xar-form-label" title="#xarML('The name of module alias to be used.')#">
+                            <xar:mlstring>Module Alias Name</xar:mlstring>
+                        </label>
+                        <input type="text" name="aliasname" id="aliasname" value="#$aliasname#" size="32" maxlength="100" />
+                    </div>
+                     <div class="xar-form-input-wrapper">
+                        <label for="hidemoduleurl" class="xar-form-label" title="#xarML('Prevent the module URL being used for registration')#">
+                            <xar:mlstring>Hide module URL?</xar:mlstring>
+                        </label>
+                        <xar:data-input type="checkbox" name="hidemoduleurl" id="hidemoduleurl" value="1" checked="$hidemoduleurl" />
+                    </div>
+                </fieldset>
+                <fieldset>
+                        <legend>
+                            <xar:mlstring>Service/Privacy</xar:mlstring>
+                        </legend>
+                        <div class="xar-form-input-wrapper-after">
+                            <xar:data-input type="checkbox" name="showterms" id="showterms" checked="$showterms" tabindex="$tabindex++" />
+                            <label for="showterms" title="#xarML('Show terms of service in Registration user menu')#">
+                                <xar:mlstring>
+                                    Show Terms of Service link in the menu?
+                                </xar:mlstring>
+                            </label>
+                        </div>
+                         <div class="xar-form-input-wrapper xar-padding-thicktop">
+                            <label for="customterms" class="xar-form-label" title="#xarML('URL for customised Terms')#">
+                                <strong><xar:mlstring>
+                                    Custom Terms Link:
+                                </xar:mlstring></strong>
+                            </label>
+                            <xar:data-input type="$contenttype" name="customterms" id="customterms" value="$customterms" tabindex="$tabindex++" />
+
+                            <p class="xar-form-input-wrapper-after"><xar:mlstring>
+                            [default: empty] If  Custom Terms is empty, the default terms template [user-terms.xd] will be used. This template can also be overridden and customised. Alternatively provide your own custom Terms content.
+                            </xar:mlstring>
+                            </p>
+                        </div>
+                        <div class="xar-form-input-wrapper-after">
+                            <xar:data-input type="checkbox" name="showprivacy" id="showprivacy" checked="$showprivacy" tabindex="$tabindex++" />
+                            <label for="showprivacy" title="#xarML('Show privacy policy in Registration user menu')#">
+                                <xar:mlstring>
+                                    Show Privacy Policy link in the menu?
+                                </xar:mlstring>
+                            </label>
+                        </div>
+                         <div class="xar-form-input-wrapper xar-padding-thicktop">
+                            <label for="customprivacy" class="xar-form-label" title="#xarML('URL for customised Privacy info')#">
+                                <strong><xar:mlstring>
+                                    Custom Privacy Link:
+                                </xar:mlstring></strong>
+                            </label>
+                            <xar:data-input type="$contenttype" name="customprivacy" id="customprivacy"  value="$customprivacy" tabindex="$tabindex++" />
+
+                            <p class="xar-form-input-wrapper-after"><xar:mlstring>
+                             [default: empty] If Custom Privacy is empty, the default privacy template [user-privacy.xd] will be used. This template can also be overridden and customised. Alternatively provide your own custom Privacy content.
+                            </xar:mlstring>
+                            </p>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="xar-form-input-wrapper-after">
+                            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                            <input type="hidden" name="phase" id="phase" value="update" />
+                            <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                            <input type="submit" value="#xarML('Update Registration Configuration')#" tabindex="#$tabindex++#" />
+                        </div>
+                    </fieldset>
+                </form>
+                <xar:comment>
+                    Begin Registration Options
+                </xar:comment>
+                <xar:elseif condition="$tab eq 'registration'" />
+                <form method="post" action="#xarModURL('registration','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
+                    <fieldset>
+                        <legend>
+                            <xar:mlstring>
+                                Activate Registration
+                            </xar:mlstring>
+                        </legend>
+                         <div class="xar-form-input-wrapper-after">
+                            <xar:data-input type="checkbox" name="allowregistration" id="allowregistration" value="1" checked="$allowregistration" tabindex="$tabindex++" />
+                            <label for="allowregistration" class="help" title="#xarML('Allow anonymous users to create member accounts on this website')#">
+                                <xar:mlstring>
+                                    Allow Registration
+                                </xar:mlstring>
+                            </label>
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label for="defaultgroup" title="#xarML('New Users automatically get assigned to this Group')#" class="help xar-form-label">
+                                <xar:mlstring>
+                                    Default Group For New Users:
+                                </xar:mlstring>
+                            </label>
+                            <xar:data-input type="dropdown" id="defaultgroup" name="defaultgroup" options="$groupdropdown" value="$defaultgroup" tabindex="$tabindex++" />
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>
+                                 <xar:mlstring>User Registration Options</xar:mlstring>
+                        </legend>
+
+                            <div class="xar-form-input-wrapper">
+                                <label for="minage" title="#xarML('Users need to be this age or older to register')#" class="help xar-form-label">
+                                    <xar:mlstring>
+                                        Minimum Age To Be A User:
+                                    </xar:mlstring>
+                                </label>
+                                <xar:data-input type="textbox" name="minage" id="minage" value="$minage" maxlength="3" class="xar-form-textshort" tabindex="$tabindex++" />
+                                <xar:mlstring>A value of 0 disables the age check.</xar:mlstring>
+                            </div>
+                            <div class="xar-form-input-wrapper-after">
+                                <xar:data-input type="checkbox" name="repeatemail" id="repeatemail" value="1" checked="$repeatemail" tabindex="$tabindex++" />
+                                <label for="repeatemail" class="help" title="#xarML('Require user email addresses to be typed twice during registration')#">
+                                    <xar:mlstring>
+                                        Require email address to be entered twice
+                                    </xar:mlstring>
+                                </label>
+                            </div>
+                            <div class="xar-form-input-wrapper-after">
+                                <xar:data-input type="checkbox" name="chooseownpassword" id="chooseownpassword" value="1" checked="$chooseownpassword" tabindex="$tabindex++" />
+                                <label for="chooseownpassword" class="help" title="#xarML('Allow users to choose their own password when registering rather than having a system generated password')#">
+                                    <xar:mlstring>
+                                        Users May Choose Their Own Password
+                                    </xar:mlstring>
+                                </label>
+                            </div>
+                             <div class="xar-form-input-wrapper-after">
+                                <xar:data-input type="checkbox" name="requiredisplayname" id="requiredisplayname" value="1" checked="$requiredisplayname" tabindex="$tabindex++" />
+                                <label for="repeatemail" class="help" title="#xarML('Require user to provide a Display name as well as a  login user name')#">
+                                    <xar:mlstring>
+                                        Require user to provide Display name? (Roles variable, here for convenience)
+                                    </xar:mlstring>
+                                </label>
+                            </div>
+                             <div class="xar-form-input-wrapper-after">
+                                <xar:data-input type="checkbox" name="uniquedisplay" id="uniquedisplay" value="1" checked="$uniquedisplay" tabindex="$tabindex++" />
+                                <label for="repeatemail" class="help" title="#xarML('Require Display name to be unique')#">
+                                    <xar:mlstring>
+                                        Require a unique Display name? (Roles variable, here for convenience)
+                                    </xar:mlstring>
+                                </label>
+                            </div>
+                            <div class="xar-form-input-wrapper-after">
+                                <xar:data-input type="checkbox" name="sendnotice" id="sendnotice" checked="$sendnotice" tabindex="$tabindex++" />
+                                <label for="sendnotice" class="help" title="#xarML('Notify Admin by email when users create a new account')#">
+                                    <xar:mlstring>
+                                        Send Notice To Admin Upon User Registration
+                                    </xar:mlstring>
+                                </label>
+                            </div>
+                            <div class="xar-form-input-wrapper">
+                                <label for="sendnotice" class="help xar-form-label" title="#xarML('Email address for admin notification')#">
+                                    <xar:mlstring>
+                                        Email for notification to Admin
+                                    </xar:mlstring>
+                                </label>
+                                <xar:data-input type="textbox" name="notifyemail" id="notifyemail" value="$notifyemail" size="40" maxlength="150" tabindex="$tabindex++" />
+
+                            </div>
+                            <div class="xar-form-input-wrapper-after">
+                                <xar:data-input type="checkbox" name="explicitapproval" id="explicitapproval" checked="$explicitapproval" />
+                                <label for="explicitapproval" class="help" title="#xarML('Administrator must approve and activate new user accounts')#">
+                                    <xar:mlstring>
+                                        User Activation Requires Administrator Approval
+                                    </xar:mlstring>
+                                </label>
+                            </div>
+                            <div class="xar-form-input-wrapper-after">
+                                <xar:data-input type="checkbox" name="requirevalidation" id="requirevalidation" checked="$requirevalidation" tabindex="$tabindex++" />
+                                <label for="requirevalidation" class="help" title="#xarML('Users must confirm their email address and account creation after receiving a confirmation email with link and code')#">
+                                    <xar:mlstring>
+                                        Require Validation Of NEW users via their email address
+                                    </xar:mlstring>
+                                </label>
+                            </div>
+                            <xar:comment> move to roles
+                            <div class="xar-form-input-wrapper-after">
+                                <xar:data-input type="checkbox" name="requiredisplayname" id="requiredisplayname" checked="$requiredisplayname" tabindex="$tabindex++" />
+                                <label for="requiredisplayname" class="help" title="#xarML('Require Display Name to be provided as well as username?')#">
+                                    <xar:mlstring>
+                                        Require Display Name to be provided?
+                                    </xar:mlstring>
+                                </label>
+                            </div>
+                            </xar:comment>
+                            <div class="xar-form-input-wrapper-after">
+                                <xar:data-input type="checkbox" name="showdynamic" id="showdynamic" checked="$showdynamic" tabindex="$tabindex++" />
+                                <label for="showdynamic" class="help" title="#xarML('Allow users to enter dynamic property values during account creation process')#">
+                                    <xar:mlstring>
+                                        Show Dynamic Properties On Registration (if enabled)
+                                    </xar:mlstring>
+                                </label>
+                            </div>
+                            <div class="xar-form-input-wrapper-after">
+                               <xar:data-input type="checkbox" name="sendwelcomeemail" id="sendwelcomeemail" checked="$sendwelcomeemail" tabindex="$tabindex++" />
+                                <label for="sendwelcomeemail" class="help" title="#xarML('Users can be notified when their account has been created')#">
+                                    <xar:mlstring>
+                                        Send Welcome Email On Successful Registration Of User
+                                    </xar:mlstring>
+                                </label>
+                            </div>
+
+                            <xar:comment>
+                                <div class="xar-form-input-wrapper-after">
+                                    <xar:data-input type="checkbox" name="allowinvisible" id="allowinvisible" checked="$allowinvisible" tabindex="$tabindex++" />
+                                    <label for="allowinvisible" title="#xarML('Allow users to be hidden in user list')#">
+                                        <xar:mlstring>
+                                            Allow Users To Be Invisible In Users List
+                                        </xar:mlstring>
+                                    </label>
+                                </div>
+                            </xar:comment>
+                        </fieldset>
+
+                        <div class="xar-form-footer">
+                            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                            <input type="hidden" name="phase" id="phase" value="update" />
+                            <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                            <input type="submit" value="#xarML('Update Registration Configuration')#" tabindex="#$tabindex++#" />
+
+                            <p >
+                                <xar:set name="mailconfigure">xarModUrl('roles','admin','modifynotice')</xar:set>
+                                <xar:ml>
+                                    <xar:mlstring>
+                                        Email notifications for changes made to roles by Administrators can be made
+                                        in the <a href="#(1)">Roles Messaging configuration</a>.
+                                    </xar:mlstring>
+                                    <xar:mlvar>
+                                       #$mailconfigure#
+                                    </xar:mlvar>
+                                </xar:ml>
+                            </p>
+                        </div>
+                </form>
+            </xar:if>
+        </div>
+    </div>
+</div>

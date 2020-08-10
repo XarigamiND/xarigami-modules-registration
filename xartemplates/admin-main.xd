@@ -78,13 +78,9 @@
             </p>
             <br />
            <h3><xar:mlstring>Further Information</xar:mlstring></h3>
-           <p>
-              <xar:mlstring>Further information on the Xarigami Registration module can be found at:</xar:mlstring>
-           </p>
            <ul>
-              <li><xar:mlstring>Xarigami Registration Project page at</xar:mlstring> <a title="#xarML('Registration Module')#" href="http://xarigami.com/project/xarigami_registration">Xarigami Registration Project Page</a>.
-              </li>
-
+            <li><a href="http://xarigami.org/project/xarigami_registration"><xar:mlstring>Xarigami Registration project page</xar:mlstring></a></li>
+            <li><a href="http://xarigami.org/contrails/displayproject/xreg"><xar:mlstring>Xarigami Registration issue tracker</xar:mlstring></a></li>
           </ul>
           <p class="xar-sub">
             <strong>&nbsp;<xar:mlstring>Registration Module Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Document revision</xar:mlstring> 1.0.2&nbsp; 2009-08-02
